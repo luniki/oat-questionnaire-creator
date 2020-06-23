@@ -10,9 +10,9 @@
       </div>
     </section>
     <block-editor
-      v-if="categories.length"
+      v-if="definitions.categories.length"
       class="editor content"
-      :categories="categories"
+      :definitions="definitions"
       :data="data"
     ></block-editor>
   </div>
@@ -22,7 +22,7 @@
 import BlockEditor from "./BlockEditor.vue";
 
 export default {
-  props: ["categories", "data"],
+  props: ["definitions", "data"],
   components: {
     "block-editor": BlockEditor
   }

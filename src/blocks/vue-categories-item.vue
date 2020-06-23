@@ -55,8 +55,6 @@
 </template>
 
 <script>
-import { categories } from "../oat-export";
-
 export default {
   props: {
     value: {
@@ -73,7 +71,7 @@ export default {
   },
   data() {
     return {
-      categories: categories,
+      categories: this.value.categories,
       checkedCategories: []
     };
   },

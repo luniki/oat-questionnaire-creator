@@ -27,7 +27,7 @@ const ICON =
   '<svg style="margin-top: 8px" width="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M448 48v32a16 16 0 0 1-16 16h-48v368a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16V96h-32v368a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16V352h-32a160 160 0 0 1 0-320h240a16 16 0 0 1 16 16z" class=""></path></svg>';
 
 export default {
-  props: ["categories", "data"],
+  props: ["definitions", "data"],
   data() {
     return {
       config: {
@@ -44,7 +44,10 @@ export default {
             class: TextItem
           },
           "categories-item": {
-            class: CategoriesItem
+            class: CategoriesItem,
+            config: {
+              categories: this.definitions.categories
+            }
           }
         },
         data: this.data

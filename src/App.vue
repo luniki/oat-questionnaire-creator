@@ -2,10 +2,10 @@
   <div>
     <nav-bar></nav-bar>
     <div class="container">
-      <upload-categories v-model="categories"></upload-categories>
+      <upload-definitions v-model="definitions"></upload-definitions>
       <create-questionnaire
-        v-if="categories && categories.length"
-        :categories="categories"
+        v-if="definitions.categories.length"
+        :definitions="definitions"
         :data="data"
       ></create-questionnaire>
     </div>
@@ -15,12 +15,12 @@
 <script>
 import CreateQuestionnaire from "./components/CreateQuestionnaire.vue";
 import NavBar from "./components/NavBar.vue";
-import UploadCategories from "./components/UploadCategories.vue";
+import UploadDefinitions from "./components/UploadDefinitions.vue";
 
 export default {
   data() {
     return {
-      categories: [],
+      definitions: { categories: [], scales: [] },
       data: {
         time: 1591362820044,
         blocks: [
@@ -43,7 +43,7 @@ export default {
   components: {
     "create-questionnaire": CreateQuestionnaire,
     "nav-bar": NavBar,
-    "upload-categories": UploadCategories
+    "upload-definitions": UploadDefinitions
   }
 };
 </script>

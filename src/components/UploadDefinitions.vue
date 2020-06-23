@@ -4,16 +4,16 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            1. Kategorien hochladen
+            1. Definitionen hochladen
           </h1>
           <h2 class="subtitle">
-            Laden Sie bitte den Export der von Ihnen gewünschten Kategorien
-            hoch.
+            Laden Sie bitte den Export der von Ihnen gewünschten Kategorien und
+            Skalen hoch.
           </h2>
         </div>
       </div>
     </section>
-    <section class="section" v-if="!(categories && categories.length)">
+    <section class="section" v-if="!hasDefinitions()">
       <b-field>
         <b-upload v-model="file" @input="handleUpload" drag-drop expanded>
           <section class="section">
@@ -32,11 +32,11 @@
 
     <section
       class="section content categories"
-      v-if="categories && categories.length"
+      v-if="definitions.categories && definitions.categories.length"
     >
       <h4>Enthaltene Kategorien:</h4>
       <b-tag
-        v-for="category in categories"
+        v-for="category in definitions.categories"
         :key="category.name"
         :style="{ backgroundColor: category.settings.color }"
         >{{ category.name }}</b-tag
@@ -51,21 +51,30 @@ export default {
   data() {
     return {
       file: null,
-      categories: this.value
+      definitions: this.value
     };
   },
   methods: {
+    hasDefinitions() {
+      return (
+        Array.isArray(this.definitions.categories) &&
+        this.definitions.categories.length &&
+        Array.isArray(this.definitions.scales)
+      );
+    },
     handleUpload() {
       const reader = new FileReader();
 
       reader.onload = e => {
-        this.categories = [];
+        this.$set(this.definitions, "categories", []);
+        this.$set(this.definitions, "scales", []);
         const importAsString = e.target.result;
 
         try {
           const json = JSON.parse(importAsString);
-          this.categories = importCategories(json);
-          this.$emit("input", this.categories);
+          this.$set(this.definitions, "categories", importCategories(json));
+          this.$set(this.definitions, "scales", importScales(json));
+          this.$emit("input", this.definitions);
           this.$nextTick(() => this.$refs.categoriesList.scrollIntoView());
         } catch (error) {
           console.log(error);
@@ -91,6 +100,13 @@ export default {
 function importCategories(json) {
   if ("categories" in json && json.categories.length) {
     return json.categories;
+  }
+
+  throw new Error("Die Datei hat ein falsches Format.");
+}
+function importScales(json) {
+  if ("scales" in json && Array.isArray(json.scales)) {
+    return json.scales;
   }
 
   throw new Error("Die Datei hat ein falsches Format.");
