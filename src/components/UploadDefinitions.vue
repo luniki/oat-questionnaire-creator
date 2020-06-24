@@ -4,7 +4,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            1. Definitionen hochladen
+            2. Definitionen hochladen
           </h1>
           <h2 class="subtitle">
             Laden Sie bitte den Export der von Ihnen gewünschten Kategorien und

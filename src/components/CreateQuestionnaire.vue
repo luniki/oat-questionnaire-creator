@@ -4,7 +4,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            2. Fragebogen erstellen
+            3. Fragebogen erstellen
           </h1>
         </div>
       </div>
@@ -12,8 +12,9 @@
     <block-editor
       v-if="definitions.categories.length"
       class="editor content"
-      :definitions="definitions"
       :data="data"
+      :definitions="definitions"
+      :prompt="prompt"
     ></block-editor>
   </div>
 </template>
@@ -22,7 +23,7 @@
 import BlockEditor from "./BlockEditor.vue";
 
 export default {
-  props: ["definitions", "data"],
+  props: ["data", "definitions", "prompt"],
   components: {
     "block-editor": BlockEditor
   }

@@ -2,11 +2,13 @@
   <div>
     <nav-bar></nav-bar>
     <div class="container">
+      <customize-prompt v-model="prompt"></customize-prompt>
       <upload-definitions v-model="definitions"></upload-definitions>
       <create-questionnaire
         v-if="definitions.categories.length"
-        :definitions="definitions"
         :data="data"
+        :definitions="definitions"
+        :prompt="prompt"
       ></create-questionnaire>
     </div>
   </div>
@@ -14,6 +16,7 @@
 
 <script>
 import CreateQuestionnaire from "./components/CreateQuestionnaire.vue";
+import CustomizePrompt from "./components/CustomizePrompt.vue";
 import NavBar from "./components/NavBar.vue";
 import UploadDefinitions from "./components/UploadDefinitions.vue";
 
@@ -36,12 +39,14 @@ export default {
           }
         ],
         version: "2.18.0"
-      }
+      },
+      prompt: ""
     };
   },
   methods: {},
   components: {
     "create-questionnaire": CreateQuestionnaire,
+    "customize-prompt": CustomizePrompt,
     "nav-bar": NavBar,
     "upload-definitions": UploadDefinitions
   }

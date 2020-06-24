@@ -27,7 +27,7 @@ const ICON =
   '<svg style="margin-top: 8px" width="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M448 48v32a16 16 0 0 1-16 16h-48v368a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16V96h-32v368a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16V352h-32a160 160 0 0 1 0-320h240a16 16 0 0 1 16 16z" class=""></path></svg>';
 
 export default {
-  props: ["definitions", "data"],
+  props: ["data", "definitions", "prompt"],
   data() {
     return {
       config: {
@@ -68,11 +68,18 @@ export default {
     },
     async saveButton() {
       this.output = "";
-
       const outputData = await this.editor.save();
-
+      if (this.validateSpecialBlocks(outputData)) {
+        this.output = createSchemaFrom(this.prompt, outputData);
+        this.blob = this.createBlob();
+      } else {
+        this.showError();
+      }
+    },
+    validateSpecialBlocks(outputData) {
       const len = this.editor.blocks.getBlocksCount();
       let specialBlocksInEditor = 0;
+
       for (let index = 0; index < len; index++) {
         const block = this.editor.blocks.getBlockByIndex(index);
         if (block.name !== PARAGRAPH) {
@@ -84,30 +91,31 @@ export default {
         (memo, block) => memo + (block.type !== PARAGRAPH ? 1 : 0),
         0
       );
-
-      if (specialBlocksInEditor == specialBlocksInOutput) {
-        this.output = createSchemaFrom(outputData);
-        this.blob = new Blob([JSON.stringify(this.output)], {
-          type: "application/json"
-        });
-      } else {
-        this.$buefy.dialog.alert({
-          title: "Fehler",
-          message: "Definition des Fragebogens ist nicht vollständig.",
-          type: "is-danger",
-          hasIcon: true,
-          icon: "times-circle",
-          iconPack: "fa",
-          ariaRole: "alertdialog",
-          ariaModal: true
-        });
-      }
+      return specialBlocksInEditor === specialBlocksInOutput;
+    },
+    createBlob() {
+      return new Blob([JSON.stringify(this.output)], {
+        type: "application/json"
+      });
+    },
+    showError() {
+      this.$buefy.dialog.alert({
+        title: "Fehler",
+        message: "Definition des Fragebogens ist nicht vollständig.",
+        type: "is-danger",
+        hasIcon: true,
+        icon: "times-circle",
+        iconPack: "fa",
+        ariaRole: "alertdialog",
+        ariaModal: true
+      });
     }
   }
 };
 
-function createSchemaFrom(data) {
+function createSchemaFrom(prompt, data) {
   const jsonform = {
+    prompt,
     schema: {},
     form: []
   };
