@@ -138,6 +138,14 @@ function createSchemaFrom(prompt, data) {
           ...block.data
         };
         jsonform.form.push(schemaId);
+        break;
+      case "text-item":
+        schemaId = `item-${itemId++}`;
+        jsonform.schema[schemaId] = {
+          type: "string",
+          ...block.data
+        };
+        jsonform.form.push(schemaId);
     }
   });
 
